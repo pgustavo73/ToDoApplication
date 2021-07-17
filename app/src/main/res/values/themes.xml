@@ -1,0 +1,14 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.ToDoApplication" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorPrimary">#FF6200EE</item>
+        <item name="colorPrimaryDark">@android:color/transparent</item>
+        <item name="colorSecondary">#FFFFFF</item>
+        <item name="colorOnSecondary">#EA03FB</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:windowBackground">@drawable/gradient</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+       <item name="android:colorForeground">#FFFFFF</item>
+    </style>
+
+</resources>

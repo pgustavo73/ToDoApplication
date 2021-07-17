@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="LoginTextInputLayoutStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+        <item name="boxStrokeColor">@color/text_input_box_stroke</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:hint">@color/text_input_box_stroke</item>
+    </style>
+    <style name="AppToolbar" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="android:itemTextAppearance">@style/menu_item_color</item>
+    </style>
+    <style name="menu_item_color">
+        <item name="android:textColor">#EA03FB</item>
+    </style>
+</resources>

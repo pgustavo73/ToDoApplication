@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">ToDoApplication</string>
+    <string name="Title">Tarefas</string>
+    <string name="criar_tarefa">Salvar</string>
+    <string name="titulo">Titulo</string>
+    <string name="cancelar">Cancelar</string>
+    <string name="nova_tarefa">Nova Tarefa</string>
+    <string name="edit">Editar</string>
+    <string name="delete">Deletar</string>
+</resources>

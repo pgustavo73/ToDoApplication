@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:Android="http://schemas.android.com/tools">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        app:layout_constraintTop_toTopOf="parent"
+        app:titleTextColor="#FFFFFF"
+        app:title="Criar Tarefa"
+        app:navigationIcon="@drawable/ic_navigate_back"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guide_start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="30dp"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guide_end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="30dp"/>
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/LoginTextInputLayoutStyle"
+        android:id="@+id/txt_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:textColorHint="#FFFFFF"
+        app:hintTextColor="#FFFFFF"
+        android:hint="Titulo"
+        app:layout_constraintEnd_toEndOf="@id/guide_end"
+        app:layout_constraintStart_toStartOf="@id/guide_start"
+        app:layout_constraintTop_toBottomOf="@id/toolbar">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/LoginTextInputLayoutStyle"
+        android:id="@+id/imp_data"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="12dp"
+        android:textColorHint="#FFFFFF"
+        android:hint="Data"
+        app:layout_constraintEnd_toStartOf="@id/imp_hora"
+        app:layout_constraintStart_toStartOf="@id/guide_start"
+        app:layout_constraintTop_toBottomOf="@id/txt_title"
+        app:startIconDrawable="@drawable/ic_baseline_calendar_today_24"
+        app:startIconTint="#FFFFFF">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            android:inputType="none" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/LoginTextInputLayoutStyle"
+        android:id="@+id/imp_hora"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Hora"
+        android:textColorHint="#FFFFFF"
+        app:layout_constraintEnd_toEndOf="@id/guide_end"
+        app:layout_constraintStart_toEndOf="@id/imp_data"
+        app:layout_constraintTop_toTopOf="@id/imp_data"
+        app:startIconDrawable="@drawable/ic_time"
+        app:startIconTint="#FFFFFF">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            android:inputType="none" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/bt_Cancel"
+        android:layout_width="0dp"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        app:backgroundTint="#FFFFFF"
+        android:text="@string/cancelar"
+        android:textAllCaps="false"
+        android:layout_marginBottom="4dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/guide_start"
+        app:layout_constraintEnd_toEndOf="@id/guide_end"
+        app:layout_constraintBottom_toTopOf="@id/bt_criar" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/bt_criar"
+        style="@style/Widget.MaterialComponents.Button"
+        android:layout_width="0dp"
+        android:text="@string/criar_tarefa"
+        android:textAllCaps="false"
+        android:layout_marginBottom="16dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/guide_start"
+        app:layout_constraintEnd_toEndOf="@id/guide_end"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
