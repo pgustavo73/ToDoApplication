@@ -4,16 +4,23 @@ import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
+import androidx.lifecycle.LiveData
 import com.pgustavo.todoapplication.databinding.ActivityMainBinding
-import com.pgustavo.todoapplication.datasource.TaskDataSource
+import com.pgustavo.todoapplication.datasource.TaskDatabase
+import com.pgustavo.todoapplication.model.Task
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import com.pgustavo.todoapplication.viewmodel.TaskViewModel
+import org.jetbrains.anko.internals.AnkoInternals.createAnkoContext
+
 
 @Suppress("DEPRECATION")
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityMainBinding
+    private lateinit var mTaskViewModel: TaskViewModel
     private val adapter by lazy { TaskListAdapter() }
+    private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,8 +29,8 @@ class MainActivity : AppCompatActivity() {
 
         binding.rvTasks.adapter = adapter
         updateList()
-
         insertListerners()
+
     }
 
     private fun insertListerners() {
@@ -33,12 +40,12 @@ class MainActivity : AppCompatActivity() {
 
         adapter.listenerEdit = {
             val intent = Intent(this, AddTaskActivity::class.java)
-            intent.putExtra(AddTaskActivity.TASK_ID, it.id)
+            intent.putExtra(AddTaskActivity.TASK_ID, it)
             startActivityForResult(intent, CREATE_NEW_TASK)
         }
 
         adapter.listenerDelete = {
-            TaskDataSource.deleteTask(it)
+            mTaskViewModel.deleteTask(it)
             updateList()
         }
     }
@@ -50,14 +57,21 @@ class MainActivity : AppCompatActivity() {
         }
 
     private fun updateList() {
-        val list =TaskDataSource.getList()
-        binding.includeEmpty.emptyState.visibility = if (list.isEmpty()) View.VISIBLE
-        else View.GONE
 
-        adapter.submitList(TaskDataSource.getList())
+        mTaskViewModel = ViewModelProvider(this).get(TaskViewModel::class.java)
+        mTaskViewModel.readAllData.observe(this, Observer { task ->
+            adapter.submitList(task)
+
+            binding.includeEmpty.emptyState.visibility = if (task.isEmpty()) View.VISIBLE
+            else View.GONE
+
+
+        })
+
     }
 
     companion object {
         private const val CREATE_NEW_TASK = 1000
     }
 }
+

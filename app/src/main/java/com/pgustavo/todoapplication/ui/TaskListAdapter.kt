@@ -1,6 +1,7 @@
 package com.pgustavo.todoapplication.ui
 
 
+
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.widget.PopupMenu
@@ -11,7 +12,9 @@ import com.pgustavo.todoapplication.R
 import com.pgustavo.todoapplication.databinding.ItemTaskBinding
 import com.pgustavo.todoapplication.model.Task
 
+
 class TaskListAdapter : ListAdapter<Task, TaskListAdapter.TaskViewHolder>(DiffCallback()) {
+
 
     var listenerEdit : (Task) -> Unit = {}
     var listenerDelete : (Task) -> Unit = {}
@@ -25,6 +28,7 @@ class TaskListAdapter : ListAdapter<Task, TaskListAdapter.TaskViewHolder>(DiffCa
     override fun onBindViewHolder(holder: TaskViewHolder, position: Int) {
         holder.bind(getItem(position))
     }
+
 
     inner class TaskViewHolder(
         private val binding: ItemTaskBinding
@@ -52,6 +56,7 @@ class TaskListAdapter : ListAdapter<Task, TaskListAdapter.TaskViewHolder>(DiffCa
             popupMenu.show()
         }
     }
+
 }
 
 class DiffCallback : DiffUtil.ItemCallback<Task>() {
@@ -60,7 +65,3 @@ class DiffCallback : DiffUtil.ItemCallback<Task>() {
             && oldItem.title == newItem.title && oldItem.date == newItem.date
             && oldItem.hour == newItem.hour
 }
-
-
-
-

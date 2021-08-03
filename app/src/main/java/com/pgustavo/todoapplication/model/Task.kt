@@ -1,23 +1,19 @@
 package com.pgustavo.todoapplication.model
 
+import android.os.Parcelable
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import kotlinx.android.parcel.Parcelize
+
+
+@Parcelize
+@Entity(tableName = "task_table")
 data class Task(
     val title: String,
     val hour: String,
     val date: String,
-    val id: Int = 0
-) {
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (javaClass != other?.javaClass) return false
+    @PrimaryKey(autoGenerate = true)
+    val id: Int
+): Parcelable
 
-        other as Task
 
-        if (id != other.id) return false
-
-        return true
-    }
-
-    override fun hashCode(): Int {
-        return id
-    }
-}

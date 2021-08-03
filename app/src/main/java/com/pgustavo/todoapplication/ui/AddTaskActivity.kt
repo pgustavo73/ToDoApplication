@@ -3,40 +3,45 @@ package com.pgustavo.todoapplication.ui
 
 import android.app.Activity
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
 import com.pgustavo.todoapplication.databinding.ActivityAddTaskBinding
-import com.pgustavo.todoapplication.datasource.TaskDataSource
 import com.pgustavo.todoapplication.extensions.format
 import com.pgustavo.todoapplication.extensions.text
 import com.pgustavo.todoapplication.model.Task
+import com.pgustavo.todoapplication.viewmodel.TaskViewModel
 import java.util.*
 
 class AddTaskActivity : AppCompatActivity() {
 
+    private lateinit var mTaskViewModel: TaskViewModel
     private lateinit var binding: ActivityAddTaskBinding
+    var index: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAddTaskBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        mTaskViewModel = ViewModelProvider(this).get(TaskViewModel::class.java)
+
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
 
         if (intent.hasExtra(TASK_ID)) {
-            val taskId = intent.getIntExtra(TASK_ID, 0)
-            TaskDataSource.findById(taskId)?.let {
+             intent.extras?.getParcelable<Task>(TASK_ID)
+                ?.let {
                 binding.txtTitle.text = it.title
                 binding.impData.text = it.date
                 binding.impHora.text = it.hour
-            }
-        }
+                index = it.id
+                }
 
+        }
         insertListeners()
     }
 
@@ -70,18 +75,27 @@ class AddTaskActivity : AppCompatActivity() {
                 title = binding.txtTitle.text,
                 date = binding.impData.text,
                 hour = binding.impHora.text,
-                id = intent.getIntExtra(TASK_ID, 0)
+                id = index
                     )
-            TaskDataSource.insertTask(task)
-            // Log.e("TAG", "insertListeners:" + TaskDataSource.getList())
+            insertTask(task)
             setResult(Activity.RESULT_OK)
             finish()
-
         }
 
         binding.btCancel.setOnClickListener {
             finish()
         }
+
+    }
+
+    fun insertTask(task: Task) {
+
+        if (task.id == 0 ) {
+            mTaskViewModel.addTask(task)
+        }else {
+            mTaskViewModel.updateTask(task.id, task.title, task.hour, task.date, )
+        }
+
     }
 
     companion object {
