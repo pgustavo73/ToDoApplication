@@ -19,6 +19,7 @@
         <activity
             android:name=".ui.AddTaskActivity"
             android:parentActivityName=".ui.MainActivity"/>
+        <receiver android:name=".ui.AlarmReceiver"/>
     </application>
 
 </manifest>

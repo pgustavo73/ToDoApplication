@@ -2,9 +2,16 @@ package com.pgustavo.todoapplication.ui
 
 
 import android.app.Activity
+import android.app.AlarmManager
+import android.app.Notification
+import android.app.PendingIntent
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import androidx.work.WorkManager
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
@@ -19,7 +26,9 @@ class AddTaskActivity : AppCompatActivity() {
 
     private lateinit var mTaskViewModel: TaskViewModel
     private lateinit var binding: ActivityAddTaskBinding
+    private val notificationId = 1
     var index: Int = 0
+    var notification : String = "N"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,6 +36,7 @@ class AddTaskActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         mTaskViewModel = ViewModelProvider(this).get(TaskViewModel::class.java)
+
 
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -39,6 +49,7 @@ class AddTaskActivity : AppCompatActivity() {
                 binding.impData.text = it.date
                 binding.impHora.text = it.hour
                 index = it.id
+                notification = it.title
                 }
 
         }
@@ -65,8 +76,34 @@ class AddTaskActivity : AppCompatActivity() {
                 val hour = if (timePicker.hour in 0..9) "0${timePicker.hour}" else timePicker.hour
                 binding.impHora.text = "${hour} : ${minute}"
 
+                val intent = Intent(this@AddTaskActivity, AlarmReceiver::class.java)
+                intent.putExtra("notificationId", notificationId)
+                if (notification == "N") {
+                    notification = binding.txtTitle.text
+                }
+                intent.putExtra("message", notification)
+
+                var pendingIntent = PendingIntent.getBroadcast(
+                    this@AddTaskActivity, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT
+                )
+
+                var alarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
+
+                val startTime = Calendar.getInstance()
+                startTime[Calendar.HOUR_OF_DAY] = timePicker.hour
+                startTime[Calendar.MINUTE] = timePicker.minute
+                startTime[Calendar.SECOND] = 0
+                Log.e("Horas", timePicker.hour.toString())
+                Log.e("Minutos", timePicker.minute.toString())
+                Log.e("titulo", notification)
+                val alarmStartTime = startTime.timeInMillis
+
+                alarmManager.set(AlarmManager.RTC_WAKEUP, alarmStartTime, pendingIntent)
+
+
             }
             timePicker.show(supportFragmentManager, null)
+
 
         }
 
@@ -76,7 +113,7 @@ class AddTaskActivity : AppCompatActivity() {
                 date = binding.impData.text,
                 hour = binding.impHora.text,
                 id = index
-                    )
+                        )
             insertTask(task)
             setResult(Activity.RESULT_OK)
             finish()
@@ -93,7 +130,7 @@ class AddTaskActivity : AppCompatActivity() {
         if (task.id == 0 ) {
             mTaskViewModel.addTask(task)
         }else {
-            mTaskViewModel.updateTask(task.id, task.title, task.hour, task.date, )
+            mTaskViewModel.updateTask(task.id, task.title, task.hour, task.date)
         }
 
     }
@@ -102,4 +139,3 @@ class AddTaskActivity : AppCompatActivity() {
         const val TASK_ID = "task_id"
     }
 }
-
