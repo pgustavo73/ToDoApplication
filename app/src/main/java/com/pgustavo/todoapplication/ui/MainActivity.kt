@@ -19,7 +19,6 @@ import org.jetbrains.anko.internals.AnkoInternals.createAnkoContext
 class MainActivity : AppCompatActivity() {
 
     private lateinit var mTaskViewModel: TaskViewModel
-    private lateinit var mAddTaskActivity: AddTaskActivity
     private val adapter by lazy { TaskListAdapter() }
     private lateinit var binding: ActivityMainBinding
 
