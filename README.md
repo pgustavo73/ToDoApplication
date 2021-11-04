@@ -1,21 +1,20 @@
-# App de Agendar Tarefas com Kotlin 
+# Hello welcome
 
-OLA"  bem vindo 
+This was the project delivered at Bootcamp Santander Mobile Developer at DIO.
 
-Este foi o projeto entregue no Bootcamping Santader Mobile Developer na DIO.
+The project aims to create a To-do list App in Kotlin.
 
-O objetivo do projeto é criar um App de To do list em Kotlin.
+In this project, View Binding, RecyclerView, Popup menu, Empty States were used.
 
-Neste projeto foi utlizado View Binding,  RecyclerView, Popup menu,  Empty States.
+It was implemented as Challenge to make the application resilient that it doesn't lose the saved tasks when it is closed.
 
-Foi implementado como Desafio tornar o aplicativo resiliente que não perca as tarefas salvas quando é encerrado.
+For this, we used SQLite using Room. In addition, the functionality of notifications was implemented.
 
-Para isso foi utilizado SQLite usando Room. Alem disso foi implementado a funcionalidadde de notificações.
+The APP issues notifications when tasks are scheduled.
 
-O APP emite notificações no horario que as tarefas são agendadas.
+Feel free to look, I am open to tips and suggestions.
 
-Fiquem a vontade para olhar estou aberto  a dicas e sugestões.
-
+# Screens
 <img src="./image/telas.jpg" />
 
 Video Demo
