@@ -1,9 +1,13 @@
 package com.pgustavo.todoapplication.ui
 
 import android.app.Activity
+import android.app.AlarmManager
+import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.lifecycle.LiveData
 import com.pgustavo.todoapplication.databinding.ActivityMainBinding
@@ -46,6 +50,7 @@ class MainActivity : AppCompatActivity() {
 
         adapter.listenerDelete = {
             mTaskViewModel.deleteTask(it)
+            cancelAlarm()
             updateList()
         }
     }
@@ -65,8 +70,20 @@ class MainActivity : AppCompatActivity() {
             binding.includeEmpty.emptyState.visibility = if (task.isEmpty()) View.VISIBLE
             else View.GONE
 
-
         })
+
+    }
+
+    fun cancelAlarm() {
+
+        var alarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
+        val intent = Intent(this, AlarmReceiver::class.java)
+
+        var pendingIntent = PendingIntent.getBroadcast(
+            this, 0, intent, PendingIntent.FLAG_NO_CREATE
+        )
+
+        alarmManager.cancel(pendingIntent)
 
     }
 

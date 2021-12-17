@@ -3,15 +3,11 @@ package com.pgustavo.todoapplication.ui
 
 import android.app.Activity
 import android.app.AlarmManager
-import android.app.Notification
 import android.app.PendingIntent
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
-import androidx.work.WorkManager
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
@@ -29,6 +25,9 @@ class AddTaskActivity : AppCompatActivity() {
     private val notificationId = 1
     var index: Int = 0
     var notification : String = "N"
+    var dateSet: Int = 0
+    var minuteSet: Int = 0
+    var hourSet: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,6 +62,7 @@ class AddTaskActivity : AppCompatActivity() {
                 val timeZone = TimeZone.getDefault()
                 val offset = timeZone.getOffset(Date().time) * -1
                 binding.impData.text = Date(it + offset).format()
+                dateSet = Date(it + offset).format().take(2).toInt()
             }
             datePicker.show(supportFragmentManager, "DATE_PICKER_TAG")
         }
@@ -74,36 +74,12 @@ class AddTaskActivity : AppCompatActivity() {
             timePicker.addOnPositiveButtonClickListener {
                 val minute = if (timePicker.minute in 0..9) "0${timePicker.minute}" else timePicker.minute
                 val hour = if (timePicker.hour in 0..9) "0${timePicker.hour}" else timePicker.hour
-                binding.impHora.text = "${hour} : ${minute}"
-
-                val intent = Intent(this@AddTaskActivity, AlarmReceiver::class.java)
-                intent.putExtra("notificationId", notificationId)
-                if (notification == "N") {
-                    notification = binding.txtTitle.text
-                }
-                intent.putExtra("message", notification)
-
-                var pendingIntent = PendingIntent.getBroadcast(
-                    this@AddTaskActivity, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT
-                )
-
-                var alarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
-
-                val startTime = Calendar.getInstance()
-                startTime[Calendar.HOUR_OF_DAY] = timePicker.hour
-                startTime[Calendar.MINUTE] = timePicker.minute
-                startTime[Calendar.SECOND] = 0
-                Log.e("Horas", timePicker.hour.toString())
-                Log.e("Minutos", timePicker.minute.toString())
-                Log.e("titulo", notification)
-                val alarmStartTime = startTime.timeInMillis
-
-                alarmManager.set(AlarmManager.RTC_WAKEUP, alarmStartTime, pendingIntent)
-
+                binding.impHora.text = "${hour}:${minute}"
+                minuteSet = timePicker.minute
+                hourSet = timePicker.hour
 
             }
             timePicker.show(supportFragmentManager, null)
-
 
         }
 
@@ -116,12 +92,40 @@ class AddTaskActivity : AppCompatActivity() {
                         )
             insertTask(task)
             setResult(Activity.RESULT_OK)
+            setAlarm()
             finish()
         }
 
         binding.btCancel.setOnClickListener {
             finish()
+
+    }
+
+    }
+    fun setAlarm() {
+
+        val intent = Intent(this@AddTaskActivity, AlarmReceiver::class.java)
+        intent.putExtra("notificationId", notificationId)
+        if (notification == "N") {
+            notification = binding.txtTitle.text
         }
+        intent.putExtra("message", notification)
+
+        var pendingIntent = PendingIntent.getBroadcast(
+            this@AddTaskActivity, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT
+        )
+
+        var alarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
+
+        val startTime = Calendar.getInstance()
+        startTime[Calendar.HOUR_OF_DAY] = hourSet
+        startTime[Calendar.MINUTE] = minuteSet
+        startTime[Calendar.SECOND] = 0
+        startTime[Calendar.DATE] = dateSet
+
+        val alarmStartTime = startTime.timeInMillis
+
+        alarmManager.set(AlarmManager.RTC_WAKEUP, alarmStartTime, pendingIntent)
 
     }
 
